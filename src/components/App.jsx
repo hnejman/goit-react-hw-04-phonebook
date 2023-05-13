@@ -1,42 +1,35 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { Contacts } from 'components/Contacts';
 import { Filter } from 'components/Filter';
 
-export class App extends Component {
+export function App() {
+  const [contacts, setContacts] = useState([]);
 
-  state = {
-    contacts: []
-  }
+  useEffect(() => {
+    const storedContacts = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const id = nanoid();
+      const key = localStorage.key(i);
+      const contact = {
+        name: key,
+        number: localStorage.getItem(key),
+        id: id,
+      };
+      storedContacts.push(contact);
+    }
+    setContacts(storedContacts);
+  }, []);
 
-componentDidMount(){
-  const contacts = [];
-  for (let i = 0; i < localStorage.length; i++){  
-   const id = nanoid(); 
-   let key = localStorage.key(i);
-   const contact = {
-     name: key,
-     number: localStorage.getItem(key),
-     id: id
-   }
-   contacts.push(contact);
-  };
-  this.setState({contacts});
-}
-
-  createContact = evt => {
+  const createContact = (evt) => {
     evt.preventDefault();
     const temporalName = evt.target.elements.name.value;
     const temporalNumber = evt.target.elements.number.value;
     if (
-        !this.state.contacts.filter(check => {
-          return (
-            check.name
-              .toLowerCase()
-              .includes(temporalName.toLowerCase()) ||
-            check.number.includes(temporalNumber)
-          );
-        }).length
+      !contacts.filter((check) =>
+        check.name.toLowerCase().includes(temporalName.toLowerCase()) ||
+        check.number.includes(temporalNumber)
+      ).length
     ) {
       const id = nanoid();
       const contact = {
@@ -45,29 +38,23 @@ componentDidMount(){
         id: id,
       };
       localStorage.setItem(temporalName, temporalNumber);
-      this.setState(prev => ({
-        contacts: prev.contacts.concat(contact)
-      }));
+      setContacts((prevContacts) => [...prevContacts, contact]);
     } else {
       alert(evt.target.elements.name.value + ' already in contacts');
       return 0;
     }
-  }
-
-  deleteItem = e => {
-    const contacts = this.state.contacts.filter(el => {
-      return el.id !== e.target.parentNode.id;
-    });
-    localStorage.removeItem( e.target.parentNode.textContent.slice(0, -16));
-    this.setState({ contacts });
   };
 
-  render() {
-    return (
-      <>
-        <Contacts createContact={this.createContact}/>
-        <Filter contacts={this.state.contacts} deleteItem={this.deleteItem}/>
-      </>
-    );
-  }
+  const deleteItem = (e) => {
+    const updatedContacts = contacts.filter((el) => el.id !== e.target.parentNode.id);
+    localStorage.removeItem(e.target.parentNode.textContent.slice(0, -16));
+    setContacts(updatedContacts);
+  };
+
+  return (
+    <>
+      <Contacts createContact={createContact} />
+      <Filter contacts={contacts} deleteItem={deleteItem} />
+    </>
+  );
 }
