@@ -4,6 +4,7 @@ import { Contacts } from 'components/Contacts';
 import { Filter } from 'components/Filter';
 
 export function App() {
+  
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
