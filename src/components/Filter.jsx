@@ -36,7 +36,13 @@ constructor(){
 }
 
 Filter.propTypes = {
-  contacts: PropTypes.array,
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired
+    })
+  ),
   searchBy: PropTypes.string,
-  deleteItem: PropTypes.func.isRequired
+  deleteItem: PropTypes.func
   }
