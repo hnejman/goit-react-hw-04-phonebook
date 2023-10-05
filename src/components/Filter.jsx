@@ -1,38 +1,23 @@
 import PropTypes from 'prop-types';
 import { ContactList } from './ContactList';
-import { Component } from 'react';
+import { useState } from 'react';
 
-export class Filter extends Component {
-  state = {
-    searchBy : ""
-  }
+export const Filter = ({contacts, deleteItem}) => {
+  
+  const [searchBy, search] = useState('');
 
-constructor(){
-  super();
-  this.search.bind(this);
-}
-
-  search = evt =>{
-    const searchBy = evt.target.value;
-    this.setState(()=>({
-      searchBy : searchBy
-    }))
-  };
-
-  render(){
     return (
       <div>
         <h2>Contacts</h2>
         <input type="text" onChange={evt=>{
-          this.search(evt)
+          search(evt.target.value);
           }} />
         <ContactList 
-        contacts={this.props.contacts} 
-        searchBy={this.state.searchBy} 
-        deleteItem={this.props.deleteItem}/>
+        contacts={contacts} 
+        searchBy={searchBy} 
+        deleteItem={deleteItem}/>
       </div>
     );
-  }
 }
 
 Filter.propTypes = {
@@ -43,6 +28,5 @@ Filter.propTypes = {
       id: PropTypes.string.isRequired
     })
   ),
-  searchBy: PropTypes.string,
-  deleteItem: PropTypes.func
+  deleteItem: PropTypes.func.isRequired
   }

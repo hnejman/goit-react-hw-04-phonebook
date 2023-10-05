@@ -53,7 +53,7 @@ export function App() {
 
   return (
     <>
-      <ContactsForm contact={contacts} createContact={createContact} />
+      <ContactsForm createContact={createContact} />
       <Filter contacts={contacts} deleteItem={deleteItem} />
     </>
   );

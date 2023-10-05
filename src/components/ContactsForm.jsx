@@ -1,14 +1,12 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
 
-export class ContactsForm extends Component {
-  render() {
+export const ContactsForm = ({createContact}) => {
     return (
       <>
         <h2>Phonebook</h2>
         <form
           onSubmit={evt => {
-            this.props.createContact(evt);
+             createContact(evt);
           }}
         >
           <label>Name</label>
@@ -35,7 +33,6 @@ export class ContactsForm extends Component {
         </form>
       </>
     );
-  }
 }
 
 ContactsForm.propTypes = {
